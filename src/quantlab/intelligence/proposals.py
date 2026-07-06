@@ -94,8 +94,17 @@ class ProposalStore:
         self._audit({"action": "reject", "pid": pid, "reason": reason})
         return {"applied": False, "reason": reason}
 
+    def available_versions(self) -> list[str]:
+        return sorted(p.stem for p in (self.root / "versions").glob("*.yaml"))
+
     def rollback(self, version_hash: str) -> dict:
         vfile = self.root / "versions" / f"{version_hash}.yaml"
+        if not vfile.exists():
+            avail = self.available_versions()
+            return {"rolled_back": False,
+                    "error": f"no such version '{version_hash}' — pass a version hash (from an "
+                             f"approve's prev_version), not a proposal id.",
+                    "available_versions": avail}
         self.active.write_text(vfile.read_text())
         self._audit({"action": "rollback", "to_version": version_hash})
-        return {"rolled_back_to": version_hash}
+        return {"rolled_back": True, "to_version": version_hash}

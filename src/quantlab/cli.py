@@ -140,7 +140,11 @@ def _proposals(args):
     from .intelligence.proposals import ProposalStore
     store = ProposalStore(RUNS / "proposals", _active_config())
     if args.approve:
-        print(store.approve(args.approve))
+        res = store.approve(args.approve)
+        print(res)
+        if res.get("applied"):
+            print(f"  applied {res['param']}: {res['from']} -> {res['to']}")
+            print(f"  to revert:  quantlab proposals --rollback {res['prev_version']}")
     elif args.reject:
         print(store.reject(args.reject))
     elif args.rollback:
