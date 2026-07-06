@@ -29,9 +29,6 @@ The critic **vetoing** the proposer is a feature — multi-agent disagreement is
 gets filtered before it can influence anything. *(Stage-by-stage legend + invariants + editable
 Mermaid source: [`docs/architecture.md`](docs/architecture.md).)*
 
-The critic **vetoing** the proposer is a feature — multi-agent disagreement is how manipulation gets
-filtered before it can influence anything. (Full diagram + invariants: [`docs/architecture.md`](docs/architecture.md).)
-
 ## Course concepts demonstrated
 | Concept | Where | In QuantLab |
 |---|---|---|
