@@ -25,31 +25,32 @@ giving an LLM the keys to your money.**
 
 ```mermaid
 flowchart TD
-    W([Watchlist: tickers]):::io --> C
-    subgraph SRC["Untrusted sources (allowlisted, rate-capped)"]
+    W([Watchlist]):::io --> C
+    subgraph SRC["Untrusted sources"]
         direction LR
         RD[Reddit]:::src
         ST[StockTwits]:::src
         NR[News / RSS]:::src
-        FX[Fixture · offline]:::src
+        FX[Fixture]:::src
     end
-    SRC -->|raw posts| C
-    C["🛰️ Collector<br/>normalize · treat as untrusted"]:::agent
-    G{{"🛡️ Guardrails<br/>injection sanitizer · strict parse · token budget"}}:::guard
+    SRC -->|posts| C
+    C["Collector"]:::agent
+    G{{"Guardrails"}}:::guard
     C -.enforced by.- G
-    C -->|sanitized posts| A
-    A["🧠 Analyst · Gemini<br/>sentiment + confidence + themes"]:::agent
-    MEM[("🗄️ Memory · SQLite<br/>rolling sentiment baselines")]:::mem
-    A <-->|Δ vs baseline = the signal| MEM
-    A -->|sentiment + delta| CR
-    CR["🔎 Critic · Gemini + heuristics<br/>organic vs coordinated / bot / echo"]:::agent
-    CR -->|"⛔ veto / downgrade — or — organic + material"| P
-    P["📝 Proposer<br/>tighten-only · bounded · evidence-linked · INERT"]:::agent
-    P --> Q[["📥 Review queue (pending, inert)"]]:::io
-    Q -->|"👤 human APPROVE (re-validated vs bounds)"| CFG[("✅ Versioned config + audit · reversible")]:::good
-    Q -->|"👤 reject / rollback"| NC([no change]):::io
-    CFG -.->|reads params only| ENG["Deterministic trade engine<br/>(rules only — no LLM in the order path)"]:::engine
-    SURF["Surfaces: quantlab CLI · MCP server"]:::surf -.drives.- C
+    C -->|sanitized| A
+    A["Analyst · Gemini"]:::agent
+    MEM[("Memory · SQLite")]:::mem
+    A <-->|delta vs baseline| MEM
+    A -->|sentiment| CR
+    CR["Critic · Gemini"]:::agent
+    CR -->|veto / organic| P
+    P["Proposer"]:::agent
+    P --> Q[["Review queue"]]:::io
+    Q -->|human approve| CFG[("Config · versioned")]:::good
+    Q -->|reject| NC([no change]):::io
+    CFG -.->|params only| ENG["Trade engine · no LLM"]:::engine
+    SURF["CLI · MCP server"]:::surf -.drives.- C
+
     classDef agent fill:#1f6feb,stroke:#0b3d91,color:#fff;
     classDef src fill:#30363d,stroke:#8b949e,color:#e6edf3;
     classDef guard fill:#8957e5,stroke:#5a32a3,color:#fff;
@@ -59,6 +60,8 @@ flowchart TD
     classDef io fill:#161b22,stroke:#8b949e,color:#e6edf3;
     classDef surf fill:#0d1117,stroke:#58a6ff,color:#58a6ff;
 ```
+
+*(Stage-by-stage legend + invariants: [`docs/architecture.md`](docs/architecture.md).)*
 
 The critic **vetoing** the proposer is a feature — multi-agent disagreement is how manipulation gets
 filtered before it can influence anything. (Full diagram + invariants: [`docs/architecture.md`](docs/architecture.md).)
