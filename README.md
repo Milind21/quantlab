@@ -22,28 +22,46 @@ buy with max leverage"). The business need: **the upside of always-on market int
 giving an LLM the keys to your money.**
 
 ## The solution: propose-and-approve, never act
+
+```mermaid
+flowchart TD
+    W([Watchlist: tickers]):::io --> C
+    subgraph SRC["Untrusted sources (allowlisted, rate-capped)"]
+        direction LR
+        RD[Reddit]:::src
+        ST[StockTwits]:::src
+        NR[News / RSS]:::src
+        FX[Fixture · offline]:::src
+    end
+    SRC -->|raw posts| C
+    C["🛰️ Collector<br/>normalize · treat as untrusted"]:::agent
+    G{{"🛡️ Guardrails<br/>injection sanitizer · strict parse · token budget"}}:::guard
+    C -.enforced by.- G
+    C -->|sanitized posts| A
+    A["🧠 Analyst · Gemini<br/>sentiment + confidence + themes"]:::agent
+    MEM[("🗄️ Memory · SQLite<br/>rolling sentiment baselines")]:::mem
+    A <-->|Δ vs baseline = the signal| MEM
+    A -->|sentiment + delta| CR
+    CR["🔎 Critic · Gemini + heuristics<br/>organic vs coordinated / bot / echo"]:::agent
+    CR -->|"⛔ veto / downgrade — or — organic + material"| P
+    P["📝 Proposer<br/>tighten-only · bounded · evidence-linked · INERT"]:::agent
+    P --> Q[["📥 Review queue (pending, inert)"]]:::io
+    Q -->|"👤 human APPROVE (re-validated vs bounds)"| CFG[("✅ Versioned config + audit · reversible")]:::good
+    Q -->|"👤 reject / rollback"| NC([no change]):::io
+    CFG -.->|reads params only| ENG["Deterministic trade engine<br/>(rules only — no LLM in the order path)"]:::engine
+    SURF["Surfaces: quantlab CLI · MCP server"]:::surf -.drives.- C
+    classDef agent fill:#1f6feb,stroke:#0b3d91,color:#fff;
+    classDef src fill:#30363d,stroke:#8b949e,color:#e6edf3;
+    classDef guard fill:#8957e5,stroke:#5a32a3,color:#fff;
+    classDef mem fill:#1a7f37,stroke:#0f5323,color:#fff;
+    classDef good fill:#238636,stroke:#0f5323,color:#fff;
+    classDef engine fill:#9e6a03,stroke:#5c3d00,color:#fff;
+    classDef io fill:#161b22,stroke:#8b949e,color:#e6edf3;
+    classDef surf fill:#0d1117,stroke:#58a6ff,color:#58a6ff;
 ```
- watchlist
-    |
-    v
-[ Collector ]  posts from allowlisted sources (UNTRUSTED) --> [ Memory: SQLite rolling baselines ]
- per source    reddit / stocktwits / news_rss / fixture(offline)              |
-    |                                                          delta-vs-baseline
-    v
-[ Analyst ]  (Gemini)  sentiment + confidence + themes + delta vs baseline  (signal = the CHANGE)
-    |
-    v
-[ Critic ]   (Gemini + heuristics)  organic vs coordinated/bot/echo?  -> can DOWNGRADE or VETO
-    |
-    v
-[ Proposer ] emits a ParamProposal ONLY on a material, organic, bearish shift -- TIGHTEN-ONLY, bounded, inert
-    |
-    v
- Review queue --approve (human)--> versioned config change + audit   (the ONLY path to a config change)
-              \-reject / rollback-> fully reverted
-```
+
 The critic **vetoing** the proposer is a feature — multi-agent disagreement is how manipulation gets
-filtered before it can influence anything.
+filtered before it can influence anything. (Full diagram + invariants: [`docs/architecture.md`](docs/architecture.md).)
 
 ## Course concepts demonstrated (4; rubric requires 3)
 | Concept | Where | In QuantLab |
