@@ -32,7 +32,7 @@ Mermaid source: [`docs/architecture.md`](docs/architecture.md).)*
 The critic **vetoing** the proposer is a feature — multi-agent disagreement is how manipulation gets
 filtered before it can influence anything. (Full diagram + invariants: [`docs/architecture.md`](docs/architecture.md).)
 
-## Course concepts demonstrated (4; rubric requires 3)
+## Course concepts demonstrated
 | Concept | Where | In QuantLab |
 |---|---|---|
 | **Multi-agent system (ADK-style)** | code | `intelligence/agents.py` — collector -> analyst -> critic -> proposer with an explicit veto path, on a swappable `LLMClient` (Gemini live / deterministic mock offline) |
