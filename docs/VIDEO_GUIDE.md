@@ -34,7 +34,7 @@ top in the editor. Commands to run, in order (offline shown; add `--live` to ste
 quantlab intel --watchlist NVDA AAPL XOM          # (or: --live)
 
 # STEP B — stage a real bearish-sentiment swing
-python scripts/demo.py
+python scripts/demo.py --live         # real Gemini analyst/critic (or omit --live for instant offline)
 
 # STEP C — the human review gate
 quantlab proposals                                 # copy the [id] shown
