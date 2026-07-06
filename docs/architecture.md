@@ -3,6 +3,10 @@
 **Agents propose, humans dispose.** A pipeline of specialized Gemini agents turns untrusted market
 chatter into a *bounded, human-approved* risk action. The LLM never touches the order path.
 
+![QuantLab architecture](architecture.png)
+
+<details><summary>Editable Mermaid source (rendered to <code>architecture.png</code>/<code>.svg</code> via kroki.io)</summary>
+
 ```mermaid
 flowchart TD
     W([Watchlist]):::io --> C
@@ -40,6 +44,11 @@ flowchart TD
     classDef io fill:#161b22,stroke:#8b949e,color:#e6edf3;
     classDef surf fill:#0d1117,stroke:#58a6ff,color:#58a6ff;
 ```
+
+To re-render after editing:
+`curl -s https://kroki.io/mermaid/png --data-binary @architecture.mmd -o architecture.png`
+(the ASCII-clean source lives in `architecture.mmd`).
+</details>
 
 **Legend — what each stage does:**
 - **Collector** — pulls posts from allowlisted, rate-capped sources; treats every item as untrusted.

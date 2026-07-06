@@ -23,45 +23,11 @@ giving an LLM the keys to your money.**
 
 ## The solution: propose-and-approve, never act
 
-```mermaid
-flowchart TD
-    W([Watchlist]):::io --> C
-    subgraph SRC["Untrusted sources"]
-        direction LR
-        RD[Reddit]:::src
-        ST[StockTwits]:::src
-        NR[News / RSS]:::src
-        FX[Fixture]:::src
-    end
-    SRC -->|posts| C
-    C["Collector"]:::agent
-    G{{"Guardrails"}}:::guard
-    C -.enforced by.- G
-    C -->|sanitized| A
-    A["Analyst · Gemini"]:::agent
-    MEM[("Memory · SQLite")]:::mem
-    A <-->|delta vs baseline| MEM
-    A -->|sentiment| CR
-    CR["Critic · Gemini"]:::agent
-    CR -->|veto / organic| P
-    P["Proposer"]:::agent
-    P --> Q[["Review queue"]]:::io
-    Q -->|human approve| CFG[("Config · versioned")]:::good
-    Q -->|reject| NC([no change]):::io
-    CFG -.->|params only| ENG["Trade engine · no LLM"]:::engine
-    SURF["CLI · MCP server"]:::surf -.drives.- C
+![QuantLab architecture: collector → analyst → critic → proposer → human-approved config](docs/architecture.png)
 
-    classDef agent fill:#1f6feb,stroke:#0b3d91,color:#fff;
-    classDef src fill:#30363d,stroke:#8b949e,color:#e6edf3;
-    classDef guard fill:#8957e5,stroke:#5a32a3,color:#fff;
-    classDef mem fill:#1a7f37,stroke:#0f5323,color:#fff;
-    classDef good fill:#238636,stroke:#0f5323,color:#fff;
-    classDef engine fill:#9e6a03,stroke:#5c3d00,color:#fff;
-    classDef io fill:#161b22,stroke:#8b949e,color:#e6edf3;
-    classDef surf fill:#0d1117,stroke:#58a6ff,color:#58a6ff;
-```
-
-*(Stage-by-stage legend + invariants: [`docs/architecture.md`](docs/architecture.md).)*
+The critic **vetoing** the proposer is a feature — multi-agent disagreement is how manipulation
+gets filtered before it can influence anything. *(Stage-by-stage legend + invariants + editable
+Mermaid source: [`docs/architecture.md`](docs/architecture.md).)*
 
 The critic **vetoing** the proposer is a feature — multi-agent disagreement is how manipulation gets
 filtered before it can influence anything. (Full diagram + invariants: [`docs/architecture.md`](docs/architecture.md).)
