@@ -1,0 +1,20 @@
+QuantLab — Capstone submission for the Google/Kaggle 5-Day AI Agents: Intensive
+Vibe Coding Course (Vibecoding Agents Capstone Project).
+
+Copyright (c) 2026 Milind Choudhary and contributors.
+
+This work (code and documentation in this repository) is licensed under the
+Creative Commons Attribution 4.0 International License (CC-BY-4.0), as required
+by the competition rules (Winner License Type: CC-BY 4.0).
+
+You are free to share and adapt the material for any purpose, even commercially,
+provided you give appropriate credit.
+
+SPDX-License-Identifier: CC-BY-4.0
+Full legal text: https://creativecommons.org/licenses/by/4.0/legalcode
+
+NOTE ON SCOPE: This public repository is a DEMONSTRATION system built for the
+capstone. It contains generic, off-the-shelf prompts and models only. Any
+future fine-tuned prompts, tuned models, proprietary signals, or live-trading
+components are developed separately and are NOT part of this repository or this
+license grant.

@@ -1,0 +1,19 @@
+# Data + run artifacts (regenerable)
+data/
+runs/
+# Secrets
+.env
+# Python
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.ruff_cache/
+*.egg-info/
+build/
+dist/
+# OS
+.DS_Store
+
+# live mutable config (generated; mutated by approved proposals)
+configs/active.yaml

@@ -1,0 +1,46 @@
+universe:
+  source: sp500
+  benchmark: SPY
+costs:
+  commission_per_share: 0.0
+  slippage_bps: 5.0
+risk:
+  position_pct_cap: 0.05
+  sector_pct_cap: 0.3
+  max_positions: 20
+  risk_per_trade: 0.005
+  atr_stop_mult: 2.5
+  kill_switch_dd: 0.2
+regime:
+  sma_window: 200
+  band: 0.02
+  exit_all: false
+backtest:
+  start: '2010-01-01'
+  fill: next_open
+tunable:
+  risk.position_pct_cap:
+    min: 0.01
+    max: 0.05
+    direction: tighten_only
+  risk.sector_pct_cap:
+    min: 0.1
+    max: 0.3
+    direction: tighten_only
+  risk.max_positions:
+    min: 5
+    max: 20
+    direction: tighten_only
+  risk.atr_stop_mult:
+    min: 1.5
+    max: 3.0
+    direction: tighten_only
+  regime.band:
+    min: 0.0
+    max: 0.05
+    direction: any
+strategy: trend_following
+trend_following:
+  sma_fast: 50
+  sma_slow: 200
+  momentum_window: 126

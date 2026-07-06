@@ -1,0 +1,32 @@
+# 5dgai_capstone / QuantLab — read-me-first orientation
+
+Capstone for the Google/Kaggle 5-Day GenAI: AI Agents Intensive. A research-grade algo-trading
+harness (deterministic trend-following + mean-reversion, one honest backtest) + a multi-agent
+market-intelligence layer that **proposes** strategy-param changes for human approval only.
+**No real money. Sentiment never places/sizes a trade. LLMs are nowhere in the order path.**
+Graded on agent craft → the intelligence layer (Increment C) is the centerpiece.
+
+## Get oriented
+1. `docs/specs/` — the decomposition + per-increment specs (start with the decomposition doc).
+2. README.md — what/why, success definition, standing caveats.
+3. This file — conventions + hard rules.
+
+## Build order (capstone-first, interface-anchored)
+A scaffold+config-interface → B honest thin core (data/indicators/strategies/min backtest+report)
+→ **C ★ multi-agent intelligence layer (the graded centerpiece)** → D backfill (validation, screen,
+Alpaca paper). The `tunable:` block in configs/base.yaml is the FROZEN INTERFACE the ParamProposal
+targets — bounds enforced in `config.validate_proposal`, one place, in code.
+
+## Hard rules (non-negotiable)
+- **Never commit to `main`** (kaggle_projects repo protocol) — work on `milind_5dgai_capstone`.
+- Secrets only in `.env` (gitignored). Alpaca = PAPER endpoint only (adapter hard-fails otherwise).
+- **No trade-capable MCP / live-order tools in the dev (Claude Code) session** — injection hygiene.
+- Pure core: no network / broker / `datetime.now()` in config/manifest/indicators/strategies/
+  portfolio. Side effects live in adapters. Enforced by `tests/test_import_purity.py`.
+- Honest measurement > pretty equity curve. "Doesn't beat SPY" cleanly shown = success.
+- Swap-in seams (owner learning goal): `LLMClient`/`DataProvider`/`Broker` are protocols so
+  Gemini/Alpaca/(future Rust/Robinhood) impls are ~1-file adapters.
+
+## Env
+`uv venv --python 3.11 .venv` then `uv pip install -e ".[dev]" --python .venv`.
+`.venv/bin/quantlab ...` is the CLI. `uv run pytest` / `ruff check src tests` before every commit.

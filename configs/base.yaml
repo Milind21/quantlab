@@ -1,0 +1,39 @@
+# QuantLab base config — shared across strategies. Values here are the v1 defaults.
+# The `tunable:` block is the FROZEN CONFIG INTERFACE: it declares which knobs the
+# intelligence layer's ParamProposal may touch, their hard min/max, and direction.
+#   direction: any          -> may move up or down within [min, max]
+#   direction: tighten_only -> risk knob; may ONLY move toward MORE conservative
+#                              (lower cap / tighter stop / fewer positions). Enforced in code.
+
+universe:
+  source: sp500            # current S&P 500 constituents + SPY (survivorship bias acknowledged)
+  benchmark: SPY
+
+costs:
+  commission_per_share: 0.0
+  slippage_bps: 5.0        # per side, applied to fill price
+
+risk:
+  position_pct_cap: 0.05   # max notional per position (fraction of equity)
+  sector_pct_cap: 0.30     # max per GICS sector
+  max_positions: 20
+  risk_per_trade: 0.005    # 0.5% equity risked per trade for sizing
+  atr_stop_mult: 2.5       # trailing stop = N * ATR(14) below highest close since entry
+  kill_switch_dd: 0.20     # liquidate + halt if portfolio drawdown from peak exceeds this
+
+regime:
+  sma_window: 200
+  band: 0.02               # risk-OFF when SPY < (1-band)*SMA200; hysteresis
+  exit_all: false          # OFF-regime: keep existing exits (false) vs liquidate (true)
+
+backtest:
+  start: "2010-01-01"
+  fill: next_open          # signal on close T, fill at open T+1
+
+# ---- FROZEN CONFIG INTERFACE: bounds the intelligence layer must respect ----
+tunable:
+  risk.position_pct_cap:   {min: 0.01, max: 0.05, direction: tighten_only}
+  risk.sector_pct_cap:     {min: 0.10, max: 0.30, direction: tighten_only}
+  risk.max_positions:      {min: 5,    max: 20,   direction: tighten_only}
+  risk.atr_stop_mult:      {min: 1.5,  max: 3.0,  direction: tighten_only}  # lower = tighter stop
+  regime.band:             {min: 0.0,  max: 0.05, direction: any}
