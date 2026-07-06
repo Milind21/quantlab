@@ -31,7 +31,7 @@ def test_injection_ticker_yields_no_proposal():
 def test_server_registers_expected_tools():
     import asyncio
     srv = m.build_server()
-    tools = asyncio.get_event_loop().run_until_complete(srv.list_tools())
+    tools = asyncio.run(srv.list_tools())
     names = {t.name for t in tools}
     assert {"tool_run_intel", "tool_list_proposals", "tool_approve_proposal",
             "tool_reject_proposal"} <= names

@@ -25,9 +25,9 @@ class TrendFollowing:
         sl = close.apply(lambda s: ind.sma(s, sma_slow))
         mom = close.apply(lambda s: ind.momentum(s, mom_window))
 
-        uptrend = (close > f) & (f > sl)
-        entry = uptrend.fillna(False)
-        below = (close < f).fillna(False)
-        exit_ = (below & below.shift(1).fillna(False))
+        uptrend = ((close > f) & (f > sl)).astype(bool)
+        entry = uptrend
+        below = (close < f).astype(bool)
+        exit_ = below & below.shift(1, fill_value=False)   # fill_value keeps dtype bool (no downcast warning)
         rank = mom.where(entry)
         return SignalFrame(entry=entry, exit=exit_, rank=rank)
