@@ -5,7 +5,7 @@
 ## What a valid submission needs (all required)
 1. **Kaggle Writeup** (≤2500 words, title + subtitle, a Track selected) — source: [`WRITEUP.md`](../WRITEUP.md)
 2. **Media Gallery** with a **cover image** (required)
-3. **Video** (≤5 min, on YouTube) — script: [`VIDEO_SCRIPT.md`](VIDEO_SCRIPT.md)
+3. **Video** (≤5 min, on YouTube) — script: [`VIDEO_GUIDE.md`](VIDEO_GUIDE.md)
 4. **Public project link** — a public GitHub repo with README + setup (we have it)
 
 ## Step 1 — Publish the public GitHub repo (needs you)
@@ -26,7 +26,7 @@ Sanity-check before pushing: **no `.env`, no `data/`, no `runs/`, no API keys** 
 `grep -ri "AIza\|api_key" src` should be clean). The `.gitignore` already handles this.
 
 ## Step 2 — Record + upload the video
-Follow `VIDEO_SCRIPT.md`. Clean state first (`rm -f runs/intel.db && rm -rf runs/intel runs/proposals
+Follow `VIDEO_GUIDE.md`. Clean state first (`rm -f runs/intel.db && rm -rf runs/intel runs/proposals
 configs/active.yaml`). Upload to YouTube (public/unlisted), grab the URL.
 
 ## Step 3 — Cover image
