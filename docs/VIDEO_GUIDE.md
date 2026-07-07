@@ -41,6 +41,9 @@ quantlab proposals                                 # copy the [id] shown
 quantlab proposals --approve <PASTE_ID>            # config 0.05 -> 0.035, versioned
 quantlab proposals --rollback <PASTE_prev_version> # (optional) fully reversible
 
+# STEP E — MCP: an agent-style client drives the tools over the protocol (clever tool use)
+python scripts/mcp_demo.py                          # list_tools -> run_intel -> approve, all via MCP
+
 # STEP D — trust
 python -m pytest -q                                # ~59 green (incl. injection corpus)
 ```
@@ -65,6 +68,7 @@ python -m pytest -q                                # ~59 green (incl. injection 
 | ~2:00 Step B caption | A genuine organic bearish swing → the Proposer emits **one bounded, tighten-only** proposal. |
 | ~2:30 Step C caption | Inert until a **human approves**. Approve → cap 0.05→0.035, versioned + audited. Reversible. |
 | ~3:15 Step D caption | 59 tests green — incl. a 22-post prompt-injection corpus → **0 unsafe outputs**. |
+| ~3:25 Step E caption | Same tools over MCP: an agent-style client calls run_intel / approve_proposal — same guardrails on every surface. |
 | ~3:40 Build | Gemini + MCP server + CLI · pure core · runs offline (mock) or live (Gemini) · 4 course concepts. |
 | ~4:00 Close | Genuinely useful, structurally safe. Code + writeup → github.com/Milind21/quantlab |
 
