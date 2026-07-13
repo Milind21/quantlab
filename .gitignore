@@ -1,6 +1,6 @@
 # Data + run artifacts (regenerable)
-data/
-runs/
+/data/
+/runs/
 # Secrets
 .env
 # Python
