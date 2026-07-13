@@ -1,4 +1,4 @@
-# QuantLab — a guardrailed multi-agent market-intelligence layer
+# QuantLab — A Guardrailed Multi-Agent Market-Intelligence Layer
 
 **Capstone · Google/Kaggle 5-Day AI Agents: Intensive Vibe Coding Course · Track: Agents for Business**
 
